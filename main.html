@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <!-- Built by Alan Harris, version 1.1 -->
+
+<head>
+    <title>Risk Management Calculator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+
+</head>
+
+<!-- Future plans: 
+
+    'Kinda crue but works!' 
+
+    Build in React or Vuejs + tailwindcss for frontend and make app accessible to experienced and new users. i.e (Explain what each field is and why it is important in a user-friendly way (have user hover over the labels and it will show them what these things mean))
+    Make mobile friendly as well. 
+
+    What each field is: 
+        Single Loss Expectancy (SLE) is the loss incurred due to the realisation of a threat represented as a monetary value. 
+        Loss Value is pretty much the same as the ALE but already pre-calculated before the safeguard. 
+        Asset Value is the monetary valuation of an asset.
+        Exposure Factor (EF) is the percentage of loss a realised threat can cause to an asset. usually 2 different values before and after the safeguard. 
+        Annualised Rate of Occurrence (ARO) is the expected number of times this threat is realised yearly, i.e., frequency per year.
+        Annualised Loss Expectancy (ALE) is the loss the company expects to lose per year due to the threat. This helps us decide whether paying for a particular control or safeguard is justified. This is also known as the "loss value" before the safeguard.
+        Annual cost is the cost of the safeguard per year. So if it is say $10 a month, multiply that by 12 to get $120. $120 would be the annual cost of the safeguard. 
+
+    Backend maybe django or nodejs for server-side
+    Build unit tests to help make sure everything works!
+    Put in Github and likely make open-source
+
+-->
+
+
+<body>
+    <h1>Hello Security Engineer! </h1>
+    
+    <p> Below is a Risk Management Calculator. This is used to determine the value of the safeguards that you need or not need to apply a control for your company. If the result becomes a negative after this calculation, please do not use this safeguard and look for other options.</p>
+
+    <div class="form">
+        <form>
+            <!-- TODO: Check Validations and make sure the fields that are required cannot take blank or null. Also explain what each field is. Give good examples as well on safeguards and assets -->
+            <label>Asset: </label>
+            <input type="text" id="Asset" pattern="/^[a-zA-Z]+$/g" required></input><br>
+            <br>
+            <label>Risk: </label>
+            <input type="text" id="Risk" pattern="/^[a-zA-Z]+$/g"required></input><br>
+            <br>
+            <label>Safeguard Name: </label>
+            <input type="text" id="nameOfSafeGuard" pattern="/^[a-zA-Z]+$/g" required></input><br>
+            <br>
+            <label>Value of Asset: $</label>
+            <input type="number" id="assetValue" required></input><br>
+            
+            <!-- TODO: Build logic for lossValue and integrate into a conditional statement -->
+            <br>
+            <label>Loss Value (optional): </label>
+            <input type="number" id="lossValue"></input><br>
+            <br>
+
+            <label>Before the Safeguard EF Percentage: </label>
+            <input type="number" id="beforeSafeguardEF" required> %</input><br>
+            <br>
+
+            <label>ARO value before Safeguard: </label>
+            <input type="number" id="beforeARO" required></input><br>
+            
+            <br>
+            <label>Yearly Safeguard Cost: $</label>
+            <input type="number" id="costOfSafeGuard" required></input><br>
+            
+            <br>
+            <label>After the Safeguard EF Percentage: </label>
+            <input type="number" id="afterSafeguardEF" required> %</input><br>
+            
+            <br>
+            <input type="button" value="Sumbit" onclick="calculateRisk()"></input>
+            
+        </form>
+
+    </div>
+    <br><br>
+    <div id="calcuationResult"></div>
+</body>
+
+<script>
+
+function calculateRisk() {
+    
+    // Grabs values that are important to calculation and save them to variables. 
+
+    assetValue = document.getElementById("assetValue").value;
+    beforeSafeguardEF = document.getElementById("beforeSafeguardEF").value / 100;
+    beforeARO = document.getElementById("beforeARO").value;
+    costOfSafeGuard = document.getElementById("costOfSafeGuard").value;
+    afterSafeguardEF = document.getElementById("afterSafeguardEF").value / 100; 
+    
+    // TODO: build logic for loss value.
+
+    // performs calculations: 
+
+    beforeSafeguardSLE = assetValue * beforeSafeguardEF;
+    beforeSafeguardALE = beforeSafeguardSLE * beforeARO;
+
+    afterSafeguardSLE = assetValue * afterSafeguardEF;
+    afterSafeguardALE = afterSafeguardSLE * beforeARO;
+
+    valueOfSafeguard = beforeSafeguardALE - afterSafeguardALE - costOfSafeGuard;
+
+    // Prints out the valueofSafeguard output to the calculationResult div element in the DOM. 
+
+    return document.getElementById("calcuationResult").innerHTML = valueOfSafeguard; 
+        // Build on-top of this output and provide a good range and maybe graphs to provide more insight on the security controls. 
+
+}
+
+</script>
+
+<footer>
+
+    <p>Built by Alan Harris. Hope this calculator helps!</p>
+    <p>Donate if you like this software: <a href="https://www.buymeacoffee.com/alanharris">Buymeacoffee</a> </p>
+    <h5>Calculator Version 1.1 - 3-22-2024</h5>
+    
+    
+</footer>
+</html>
